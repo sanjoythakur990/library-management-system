@@ -17,7 +17,7 @@ import lombok.Setter;
 public class Student {
     @Id // used for marking primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int rollNo;
+    private Integer rollNo;
     private String name;
     private int age;
     @Enumerated(value=EnumType.STRING)    // tells mysql to take this enums as string because mysql don't understand user defined datatypes

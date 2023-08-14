@@ -20,6 +20,6 @@ public class LibraryCard {
     @OneToOne
     @JoinColumn
 //    @PrimaryKeyJoinColumn(name="rollNo")
-    private Student student;
+    private Student student; // u need to set the student obj here
     // the child class will have the unidirectional mapping for sure(mandatory).
 }
