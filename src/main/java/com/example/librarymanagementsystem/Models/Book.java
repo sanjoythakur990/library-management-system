@@ -15,6 +15,16 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bookId;
+
+    public Book(String title, Boolean isAvailable, Genre genre, Date publicationDate, Integer price) {
+        this.title = title;
+        this.isAvailable = isAvailable;
+        this.genre = genre;
+        this.publicationDate = publicationDate;
+        this.price = price;
+    }
+
+    @Column(unique = true)
     private String title;
     private Boolean isAvailable;
     @Enumerated(value = EnumType.STRING)
