@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table
 @Getter
@@ -22,4 +25,7 @@ public class LibraryCard {
 //    @PrimaryKeyJoinColumn(name="rollNo")
     private Student student; // u need to set the student obj here
     // the child class will have the unidirectional mapping for sure(mandatory).
+
+    @OneToMany(mappedBy = "libraryCard", cascade = CascadeType.ALL)
+    private List<Transaction> transactionList=new ArrayList<>();
 }

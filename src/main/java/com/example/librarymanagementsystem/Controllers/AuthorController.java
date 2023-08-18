@@ -36,5 +36,9 @@ public class AuthorController {
             return "Author Id is invalid"+e.getMessage();
         }
     }
+    @GetMapping("/getAuthorById")
+    public Author getAuthorById(@RequestParam("authorId")Integer authorId){
+        return authorService.getAuthorById(authorId);
+    }
 
 }

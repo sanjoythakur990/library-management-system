@@ -3,14 +3,16 @@ package com.example.librarymanagementsystem.Models;
 import com.example.librarymanagementsystem.Enums.Genre;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table
 @Getter
 @Setter
+@NoArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +38,8 @@ public class Book {
     @JoinColumn
     private Author author;
     // Unidirectional Mapping
+
+    @OneToMany(mappedBy = "book",cascade = CascadeType.ALL)
+    private List<Transaction> transactionList=new ArrayList<>();
+
 }

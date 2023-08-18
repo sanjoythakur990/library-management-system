@@ -26,7 +26,7 @@ public class BookService {
         // Only entities will go inside the db and only entities will come out from the db
         // Got the Book obj
         // need to set the FK variable
-        // since it's a bidirectional mapping : need ot set in both child and parent classes
+        // since it's a bidirectional mapping : need to set in both child and parent classes
         // set the parent entity in child class
         book.setAuthor(author);
         // setting in the parent

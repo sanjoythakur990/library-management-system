@@ -31,4 +31,8 @@ public class AuthorService {
         authorRepository.save(author);
         return "Author name and PenName has been updated";
     }
+    public Author getAuthorById(Integer authorId){
+        Author author=authorRepository.findById(authorId).get();
+        return author;
+    }
 }
