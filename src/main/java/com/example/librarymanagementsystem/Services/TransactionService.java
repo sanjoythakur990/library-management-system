@@ -16,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TransactionService {
@@ -49,7 +52,7 @@ public class TransactionService {
             throw new Exception("Card is not in right status");
         }
 
-        if(card.getNoOfBooksIssued()==maxBookLimit) {
+        if(card.getNoOfBooksIssued()>=maxBookLimit) {
             transaction.setTransactionStatus(TransactionStatus.FAILED);
             transactionRepository.save(transaction);
             throw new Exception("Already max limit books are issued");
@@ -77,5 +80,37 @@ public class TransactionService {
         bookRepository.save(book);
         cardRepository.save(card);
         return "Transaction has been saved successfully";
+    }
+    public String returnBook(Integer bookId, Integer cardId){
+        // handle validation later
+        Book book=bookRepository.findById(bookId).get();
+        LibraryCard card=cardRepository.findById(cardId).get();
+
+        List<Transaction> transactionList=transactionRepository.findTransactionByBookAndLibraryCardAndTransactionStatusAndTransactionType(book,card,TransactionStatus.SUCCESS,TransactionType.ISSUE);
+        Transaction latestTransaction=transactionList.get(transactionList.size()-1);
+        Date issueDate=latestTransaction.getCreatedAt();
+        long milliSecondTime=Math.abs(System.currentTimeMillis()-issueDate.getTime());
+        long no_of_days_issued= TimeUnit.DAYS.convert(milliSecondTime,TimeUnit.MILLISECONDS);
+        int fineAmount=0;
+
+        if(no_of_days_issued>15)
+            fineAmount= (int) ((no_of_days_issued-15)*5);
+
+        book.setIsAvailable(Boolean.TRUE);
+        card.setNoOfBooksIssued(card.getNoOfBooksIssued()-1);
+
+        Transaction transaction=new Transaction(TransactionStatus.SUCCESS,TransactionType.RETURN,fineAmount);
+
+        transaction.setBook(book);
+        transaction.setLibraryCard(card);
+
+        Transaction newTransactionWithId=transactionRepository.save(transaction);
+
+        book.getTransactionList().add(newTransactionWithId);
+        card.getTransactionList().add(newTransactionWithId);
+        // save the parent entities
+        bookRepository.save(book);
+        cardRepository.save(card);
+        return "Book has successfully been returned";
     }
 }
